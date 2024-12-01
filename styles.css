@@ -1,0 +1,118 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background-image: url(./bg\ image.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+    color: white;
+    overflow-y: auto; /* Enable scrolling */
+    height: 100vh; /* Ensure full height is used */
+}
+
+.container {
+    text-align: center;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 30px 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    max-width: 400px;
+    width: 100%;
+    margin: 30px auto; /* Center the container and allow space for scrolling */
+}
+
+h1 {
+    font-size: 2em;
+    margin-bottom: 20px;
+    color: #00c3ff;
+}
+
+#clock {
+    font-size: 1.2em;
+    margin-bottom: 20px;
+    color: #ffffffc9;
+}
+
+form {
+    margin-bottom: 20px;
+}
+
+input {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: calc(100% - 100px);
+    max-width: 200px;
+    box-sizing: border-box;
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    background-color: rgb(0, 195, 255);
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #007ba7;
+}
+
+#weather {
+    margin-top: 20px;
+}
+
+#weather h2, #weather h4 {
+    margin: 10px 0;
+    color: white;
+}
+
+#weather img {
+    margin: 10px 0;
+}
+
+#forecast {
+    margin-top: 30px;
+    max-height: 400px; /* Limit forecast section height */
+    overflow-y: auto; /* Enable scrolling within forecast section */
+    padding: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+#forecast h2 {
+    margin-bottom: 15px;
+    font-size: 1.5em;
+    color: #00c3ff;
+}
+
+.forecast-item {
+    display: inline-block;
+    text-align: center;
+    margin: 10px;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    width: 80px;
+}
+
+.forecast-item img {
+    width: 50px;
+    height: 50px;
+    margin-bottom: 5px;
+}
+
+.forecast-item h3 {
+    font-size: 0.9em;
+    color: #ffffffc9;
+    margin-bottom: 5px;
+}
+
+.forecast-item p {
+    font-size: 0.9em;
+    color: white;
+}

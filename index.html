@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Weather App</h1>
+        <div id="clock"></div> <!-- Real-time Clock -->
+        <form id="cityForm">
+            <input type="text" id="city" placeholder="Enter city name" required>
+            <button type="submit" id="getWeather">Get Weather</button>
+        </form>
+        <div id="weather">
+            <p id="temperature"></p>
+            <p id="description"></p>
+            <p id="error"></p>
+        </div>
+        <div id="forecast">
+            <h2>24-Hour Forecast</h2>
+            <div id="hourlyWeather"></div>
+        </div>
+    </div>
+    <script>
+        const api_key = "b07597f1e84dd32a4423bf49474c9596";
+        const form = document.querySelector("#cityForm");
+        const search = document.querySelector("#city");
+        const weather = document.querySelector("#weather");
+        const forecast = document.querySelector("#hourlyWeather");
+        const clock = document.querySelector("#clock");
+
+        // Function to get current time and update the clock
+        const updateClock = () => {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: true });
+            clock.innerHTML = `<h2>${timeString}</h2>`;
+        };
+        setInterval(updateClock, 1000); // Update every second
+
+        // Fetch weather data
+        const getWeather = async (city) => {
+            weather.innerHTML = `<h2>Loading...</h2>`;
+            forecast.innerHTML = ``; // Clear previous forecast data
+            try {
+                // Current weather API
+                const currentWeatherUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${api_key}&units=metric`;
+                const response = await fetch(currentWeatherUrl);
+                const data = await response.json();
+                showWeather(data);
+
+                // 24-hour forecast API (uses latitude and longitude from the current weather data)
+                if (data.cod === 200) {
+                    const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${data.coord.lat}&lon=${data.coord.lon}&appid=${api_key}&units=metric`;
+                    const forecastResponse = await fetch(forecastUrl);
+                    const forecastData = await forecastResponse.json();
+                    showForecast(forecastData);
+                }
+            } catch (error) {
+                weather.innerHTML = `<h2>Error fetching weather data</h2>`;
+            }
+        };
+
+        // Display current weather
+        const showWeather = (data) => {
+            if (data.cod === "404") {
+                weather.innerHTML = `<h2>City not found</h2>`;
+                return;
+            }
+            weather.innerHTML = `
+                <div>
+                    <img src="https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png" 
+                         height="150px" width="150px" alt="Weather Icon">
+                </div>
+                <div>
+                    <h2>${data.main.temp}<sup>o</sup>C</h2>
+                    <h4>${data.weather[0].main}</h4>
+                </div>`;
+        };
+
+        // Display 24-hour weather forecast
+        const showForecast = (data) => {
+            forecast.innerHTML = data.list
+                .slice(0, 8) // Display next 8 intervals (3-hour steps = 24 hours)
+                .map((hourData) => {
+                    const time = new Date(hourData.dt * 1000).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", hour12: true });
+                    return `
+                        <div class="forecast-item">
+                            <h3>${time}</h3>
+                            <img src="https://openweathermap.org/img/wn/${hourData.weather[0].icon}.png" alt="Weather Icon">
+                            <p>${hourData.main.temp}<sup>o</sup>C</p>
+                            <p>${hourData.weather[0].main}</p>
+                        </div>`;
+                })
+                .join("");
+        };
+
+        // Form event listener
+        form.addEventListener("submit", (event) => {
+            event.preventDefault();
+            const city = search.value.trim();
+            if (city) {
+                getWeather(city);
+            } else {
+                weather.innerHTML = `<h2>Please enter a city</h2>`;
+            }
+        });
+    </script>
+</body>
+</html>
